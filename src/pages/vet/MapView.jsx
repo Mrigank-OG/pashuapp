@@ -170,10 +170,19 @@ export default function MapView() {
         >
           <ChangeView center={mapCenter} zoom={mapZoom} />
 
-          {/* High-Tech Dark CartoDB Tiles with fallback */}
+          {/* Free satellite imagery from Esri World Imagery. Attribution is required for production use. */}
           <TileLayer
-            attribution='&copy; <a href="https://carto.com/">CARTO</a> | OpenStreetMap'
-            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+            attribution='&copy; <a href="https://www.esri.com/">Esri</a>, Maxar, Earthstar Geographics, and the GIS User Community'
+            url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+            maxZoom={19}
+          />
+
+          {/* Transparent reference overlay for place names and administrative boundaries. */}
+          <TileLayer
+            attribution='&copy; <a href="https://www.esri.com/">Esri</a>'
+            url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}"
+            maxZoom={19}
+            opacity={0.92}
           />
 
           {/* Outbreak Hotspot Buffer Rings */}

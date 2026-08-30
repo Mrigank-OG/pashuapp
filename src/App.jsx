@@ -22,7 +22,7 @@ function AppLayout() {
   const isFarmerRoute = ['/report', '/report-result', '/my-reports', '/my-herd'].some(p => location.pathname.startsWith(p));
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#080C15] text-slate-100 relative selection:bg-emerald-500/30 selection:text-emerald-300 antialiased overflow-x-hidden">
+    <div className="pashu-light-theme min-h-screen flex flex-col bg-[#080C15] text-slate-100 relative selection:bg-emerald-500/30 selection:text-emerald-300 antialiased overflow-x-hidden">
       {/* Dynamic Ambient Background Glow Mesh */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
         {isFarmerRoute ? (
