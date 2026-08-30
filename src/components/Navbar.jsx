@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 
-export default function Navbar() {
+export default function Navbar({ darkMode = false, onToggleTheme = () => {} }) {
   const { lang, changeLanguage, t } = useLanguage();
   const location = useLocation();
   const navigate = useNavigate();
@@ -83,6 +83,17 @@ export default function Navbar() {
               </select>
               <span className="absolute right-2 pointer-events-none text-[10px] text-slate-400">▼</span>
             </div>
+
+            {/* Theme Toggle */}
+            <button
+              onClick={onToggleTheme}
+              aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+              title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+              className="theme-toggle px-2.5 py-1.5 text-xs font-bold rounded-xl border transition-all duration-200 flex items-center gap-1.5 active:scale-95 cursor-pointer"
+            >
+              <span>{darkMode ? '☀️' : '🌙'}</span>
+              <span className="hidden sm:inline">{darkMode ? 'Light' : 'Dark'}</span>
+            </button>
 
             {/* Portal Switcher Button */}
             <button

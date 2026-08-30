@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { LanguageProvider } from './context/LanguageContext';
 import Navbar from './components/Navbar';
@@ -19,10 +20,18 @@ import HerdLookup from './pages/vet/HerdLookup';
 
 function AppLayout() {
   const location = useLocation();
+  const [darkMode, setDarkMode] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.localStorage.getItem('pashu-theme') === 'dark';
+  });
+
+  useEffect(() => {
+    window.localStorage.setItem('pashu-theme', darkMode ? 'dark' : 'light');
+  }, [darkMode]);
   const isFarmerRoute = ['/report', '/report-result', '/my-reports', '/my-herd'].some(p => location.pathname.startsWith(p));
 
   return (
-    <div className="pashu-light-theme min-h-screen flex flex-col bg-[#080C15] text-slate-100 relative selection:bg-emerald-500/30 selection:text-emerald-300 antialiased overflow-x-hidden">
+    <div className={`${darkMode ? 'pashu-dark-theme' : 'pashu-light-theme'} min-h-screen flex flex-col bg-[#080C15] text-slate-100 relative selection:bg-emerald-500/30 selection:text-emerald-300 antialiased overflow-x-hidden`}>
       {/* Dynamic Ambient Background Glow Mesh */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
         {isFarmerRoute ? (
@@ -50,7 +59,7 @@ function AppLayout() {
 
       {/* Main Navbar */}
       <div className="relative z-40">
-        <Navbar />
+        <Navbar darkMode={darkMode} onToggleTheme={() => setDarkMode((value) => !value)} />
       </div>
 
       {/* Main Content Area */}
