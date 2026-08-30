@@ -468,7 +468,7 @@ export default function ReportForm() {
                           : "bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200"
                       }`}
                     >
-                      {d} {d === 7 ? '7+ d' : 'd'}
+                      {d === 7 ? '7d+' : `${d}d`}
                     </button>
                   ))}
                 </div>
