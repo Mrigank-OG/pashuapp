@@ -17,6 +17,8 @@ import CaseTable from './pages/vet/CaseTable';
 import CaseDetail from './pages/vet/CaseDetail';
 import OutbreakAlerts from './pages/vet/OutbreakAlerts';
 import HerdLookup from './pages/vet/HerdLookup';
+import LandingPage from './pages/LandingPage';
+import AccessPage from './pages/AccessPage';
 
 function AppLayout() {
   const location = useLocation();
@@ -28,6 +30,9 @@ function AppLayout() {
   useEffect(() => {
     window.localStorage.setItem('pashu-theme', darkMode ? 'dark' : 'light');
   }, [darkMode]);
+  const selectedRole = typeof window !== 'undefined' ? window.localStorage.getItem('pashu_role') : null;
+  const isLandingRoute = location.pathname === '/' && !selectedRole;
+  const isEntryRoute = isLandingRoute || location.pathname === '/access';
   const isFarmerRoute = ['/report', '/report-result', '/my-reports', '/my-herd'].some(p => location.pathname.startsWith(p));
 
   return (
@@ -58,15 +63,16 @@ function AppLayout() {
       </div>
 
       {/* Main Navbar */}
-      <div className="relative z-40">
+      {!isEntryRoute && <div className="relative z-40">
         <Navbar darkMode={darkMode} onToggleTheme={() => setDarkMode((value) => !value)} />
-      </div>
+      </div>}
 
       {/* Main Content Area */}
       <div className="flex-1 relative z-10">
         <Routes>
-          {/* Default redirect to farmer report form */}
-          <Route path="/" element={<Navigate to="/report" replace />} />
+          {/* First-time users begin with the role and identity gate. */}
+          <Route path="/" element={selectedRole ? <Navigate to={selectedRole === 'vet' ? '/dashboard' : '/report'} replace /> : <LandingPage darkMode={darkMode} onToggleTheme={() => setDarkMode((value) => !value)} />} />
+          <Route path="/access" element={<AccessPage darkMode={darkMode} onToggleTheme={() => setDarkMode((value) => !value)} />} />
 
           {/* Farmer-Facing Routes */}
           <Route path="/report" element={<ReportForm />} />
@@ -88,7 +94,7 @@ function AppLayout() {
       </div>
 
       {/* Mobile Farmer Bottom Navigation Dock */}
-      {isFarmerRoute && <FarmerBottomNav />}
+      {selectedRole && isFarmerRoute && <FarmerBottomNav />}
     </div>
   );
 }

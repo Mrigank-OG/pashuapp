@@ -5,7 +5,7 @@ export default function Navbar({ darkMode = false, onToggleTheme = () => {} }) {
   const { lang, changeLanguage, t } = useLanguage();
   const location = useLocation();
   const navigate = useNavigate();
-
+  const backLabel = { mr: '← भूमिका बदला', en: '← Change role', hi: '← भूमिका बदलें' }[lang] || '← Change role';
   const isVetRoute = ['/dashboard', '/map', '/cases', '/outbreaks', '/herds'].some(p => location.pathname.startsWith(p));
 
   return (
@@ -95,28 +95,17 @@ export default function Navbar({ darkMode = false, onToggleTheme = () => {} }) {
               <span className="hidden sm:inline">{darkMode ? 'Light' : 'Dark'}</span>
             </button>
 
-            {/* Portal Switcher Button */}
+            {/* Return to landing role selection; the old portal switcher is intentionally removed. */}
             <button
               onClick={() => {
-                if (isVetRoute) {
-                  navigate('/report');
-                } else {
-                  navigate('/dashboard');
-                }
+                window.localStorage.removeItem('pashu_role');
+                window.localStorage.removeItem('pashu_session');
+                navigate('/');
               }}
-              className={`px-3 sm:px-3.5 py-1.5 sm:py-2 text-xs sm:text-sm font-bold rounded-xl shadow-md border transition-all duration-200 flex items-center gap-1.5 active:scale-95 cursor-pointer ${
-                isVetRoute
-                  ? "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white border-emerald-500/60 shadow-emerald-950/40 hover:shadow-emerald-500/20"
-                  : "bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white border-cyan-500/60 shadow-cyan-950/40 hover:shadow-cyan-500/20"
-              }`}
+              className="rounded-xl border border-slate-700/80 bg-slate-900/70 px-3 py-1.5 text-xs font-bold text-slate-300 transition hover:-translate-y-0.5 hover:border-cyan-400/60 hover:text-white active:scale-95"
+              title={backLabel}
             >
-              <span className="text-sm">{isVetRoute ? "🌾" : "🩺"}</span>
-              <span className="hidden sm:inline">
-                {isVetRoute ? t('farmerPortal') : t('vetPortal')}
-              </span>
-              <span className="sm:hidden">
-                {isVetRoute ? "Farmer" : "Vet"}
-              </span>
+              {backLabel}
             </button>
 
           </div>
